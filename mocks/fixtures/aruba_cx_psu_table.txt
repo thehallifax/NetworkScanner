@@ -1,0 +1,3 @@
+Mbr/PSU  Model         PSU Status  Wattage Maximum
+1/1      JL085A        OK          500
+1/2      JL085A        Absent      500

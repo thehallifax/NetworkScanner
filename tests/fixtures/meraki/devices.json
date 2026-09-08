@@ -1,0 +1,16 @@
+[
+  {
+    "serial": "Q2SW-AAAA-0001",
+    "name": "Core-SW-01",
+    "mac": "aa:bb:cc:dd:ee:01",
+    "lanIp": "10.10.0.1",
+    "productType": "switch"
+  },
+  {
+    "serial": "Q2SW-BBBB-0002",
+    "name": "Edge-SW-02",
+    "mac": "aa:bb:cc:dd:ee:02",
+    "lanIp": "10.10.0.2",
+    "productType": "switch"
+  }
+]

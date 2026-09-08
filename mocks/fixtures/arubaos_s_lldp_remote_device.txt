@@ -1,0 +1,2 @@
+LocalPort  ChassisId        PortId  PortDescr        SysName
+1/1        9c3708-3ad140    1/1/1   uplink          SW-CORE-01

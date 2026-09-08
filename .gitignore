@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Runtime scan artifacts
+artifacts/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# TypeScript incremental state
+tsconfig.tsbuildinfo

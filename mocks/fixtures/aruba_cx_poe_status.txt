@@ -1,0 +1,3 @@
+Port  Admin  Oper  Power  Class  Type
+1/1   Up     On    12.0W  4      PD
+Total 370.0 176.8 193.2

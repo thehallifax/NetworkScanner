@@ -1,0 +1,2 @@
+Module  Available(Watts)  Used(Watts)  Remaining(Watts)
+1       370.0            176.8       193.2

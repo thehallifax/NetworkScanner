@@ -1,0 +1,28 @@
+{
+  "ports": {
+    "1": {
+      "lldp": {
+        "systemName": "Core-SW-01",
+        "portId": "1",
+        "chassisId": "aa:bb:cc:dd:ee:01",
+        "managementAddress": "10.10.0.1"
+      }
+    },
+    "2": {
+      "lldp": {
+        "systemName": "Camera-01",
+        "portId": "eth0",
+        "chassisId": "22:33:44:55:66:77"
+      }
+    },
+    "3": {
+      "cdp": {
+        "deviceId": "Polycom-01",
+        "portId": "eth0",
+        "address": "10.10.0.70",
+        "platform": "VVX",
+        "capabilities": "Phone"
+      }
+    }
+  }
+}

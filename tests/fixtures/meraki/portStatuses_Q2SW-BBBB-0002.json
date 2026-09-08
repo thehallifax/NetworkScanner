@@ -1,0 +1,5 @@
+[
+  { "portId": "1", "status": "Connected" },
+  { "portId": "2", "status": "Connected" },
+  { "portId": "3", "status": "Connected" }
+]

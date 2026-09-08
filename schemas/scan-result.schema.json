@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LLDP Scan Results",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "startedAt": { "type": "string", "format": "date-time" },
+        "finishedAt": { "type": "string", "format": "date-time" },
+        "seeds": { "type": "array", "items": { "type": "string" } },
+        "vendor": { "type": "string" },
+        "neighborsSeen": { "type": "number" },
+        "neighborsResolvedToIp": { "type": "number" },
+        "neighborsEnqueued": { "type": "number" },
+        "concurrency": { "type": "number" },
+        "retries": { "type": "number" },
+        "timeoutMs": { "type": "number" }
+      },
+      "required": ["id", "startedAt", "seeds", "vendor"]
+    },
+    "devices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "hostname": { "type": "string" },
+          "managementIp": { "type": "string" },
+          "chassisId": { "type": "string" },
+          "macAddress": { "type": "string" },
+          "model": { "type": "string" },
+          "productName": { "type": "string" },
+          "serial": { "type": "string" },
+          "osVersion": { "type": "string" },
+          "uptime": { "type": "string" },
+          "vendor": { "type": "string" },
+          "platform": { "type": "string" },
+          "kind": { "type": "string" },
+          "power": {
+            "type": "object",
+            "properties": {
+              "psu": {
+                "type": "object",
+                "properties": {
+                  "count": { "type": "number" },
+                  "absentCount": { "type": "number" },
+                  "capacityW": { "type": "number" },
+                  "availableW": { "type": "number" },
+                  "status": { "type": "string" },
+                  "details": { "type": "string" }
+                }
+              },
+              "poe": {
+                "type": "object",
+                "properties": {
+                  "availableW": { "type": "number" },
+                  "usedW": { "type": "number" },
+                  "remainingW": { "type": "number" },
+                  "status": { "type": "string" },
+                  "details": { "type": "string" }
+                }
+              }
+            }
+          },
+          "capabilities": { "type": "array", "items": { "type": "string" } },
+          "credentialUsed": { "type": "string" },
+          "state": { "type": "string" },
+          "lastError": { "type": "string" },
+          "discoveredAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["id", "hostname", "state"]
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "localHostname": { "type": "string" },
+          "localPort": { "type": "string" },
+          "remoteSystemName": { "type": "string" },
+          "remotePort": { "type": "string" },
+          "remotePortDescription": { "type": "string" },
+          "remoteChassisId": { "type": "string" },
+          "remoteManagementIp": { "type": "string" },
+          "protocol": { "type": "string" },
+          "capabilities": { "type": "array", "items": { "type": "string" } }
+        },
+        "required": ["localHostname", "localPort", "remoteSystemName", "remotePort"]
+      }
+    }
+  },
+  "required": ["metadata", "devices", "links"]
+}

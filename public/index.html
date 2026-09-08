@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLDP Topology Mapper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f3ee;
+        --panel: #ffffff;
+        --ink: #1c1b19;
+        --muted: #6c6a66;
+        --accent: #e6733c;
+        --accent-dark: #9b3b12;
+        --line: #e2ddd4;
+        --shadow: 0 12px 30px rgba(20, 16, 10, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at top left, #fde7d8, var(--bg) 45%),
+          radial-gradient(circle at bottom right, #f3e9da, transparent 55%);
+        min-height: 100vh;
+      }
+
+      header {
+        padding: 32px 48px 12px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 42px);
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin-top: 6px;
+        font-size: 15px;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+        gap: 28px;
+        padding: 24px 48px 48px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+        gap: 24px;
+        padding: 24px 48px 48px;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 16px;
+        align-self: start;
+        height: fit-content;
+      }
+
+      .content {
+        min-height: 600px;
+      }
+
+      .section {
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        margin-bottom: 16px;
+        background: #fffdf9;
+      }
+
+      .section-title {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .scan-actions {
+        margin-top: auto;
+      }
+
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+
+      .tab-button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .log-view {
+        background: #12100c;
+        color: #e7e2da;
+        border-radius: 12px;
+        padding: 12px;
+        height: 380px;
+        overflow: auto;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+
+      .details-panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        margin-top: 12px;
+        background: #fffaf4;
+      }
+
+      .details-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .details-tabs button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .config-output {
+        background: #11100d;
+        color: #f0e8df;
+        border-radius: 10px;
+        padding: 10px;
+        min-height: 480px;
+        resize: vertical;
+        overflow: auto;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        white-space: pre-wrap;
+      }
+
+      .config-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+        color: var(--muted);
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        font-family: inherit;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: #fff;
+        font-size: 14px;
+      }
+
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+
+      .field {
+        margin-bottom: 18px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .row.single {
+        grid-template-columns: 1fr;
+      }
+
+      .credentials {
+        display: grid;
+        gap: 12px;
+      }
+
+      .cred-row {
+        border: 1px dashed var(--line);
+        padding: 12px;
+        border-radius: 12px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .cred-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      button {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      button.secondary {
+        background: #f0e8df;
+        color: var(--ink);
+      }
+
+      button.ghost {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink);
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f9f0e7;
+        color: var(--accent-dark);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+
+      th {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+      }
+
+      .mono {
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+      }
+
+      .masked {
+        -webkit-text-security: disc;
+      }
+
+      .export-bar {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .link-list {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 960px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LLDP Topology Mapper</h1>
+      <div class="subtitle">Seed a scan, follow LLDP neighbors, and export audit-ready topology data.</div>
+    </header>
+    <main class="layout">
+      <section class="panel sidebar">
+        <section id="scan-form">
+          <div class="section" id="scan-targets-section">
+            <div class="section-title">Scan Targets</div>
+            <div class="field">
+              <label for="scanSource">Scan Source</label>
+              <select id="scanSource">
+                <option value="ssh">SSH (Switch Login)</option>
+                <option value="meraki">Meraki Dashboard API</option>
+              </select>
+            </div>
+            <div class="field">
+              <label><input type="checkbox" id="emitRaw" /> Write raw artifacts</label>
+            </div>
+          </div>
+
+          <div id="sshSection">
+            <div class="section">
+              <div class="section-title">SSH Targets</div>
+              <div id="discovery-targets">
+                <div class="field">
+                  <label for="vendor">Vendor</label>
+                  <select id="vendor">
+                    <option value="auto">Auto-detect</option>
+                    <option value="mock">Mock</option>
+                    <option value="aruba">Aruba AOS-S</option>
+                    <option value="cisco">Cisco IOS/IOS-XE</option>
+                  </select>
+                </div>
+                <div class="field hidden" id="allowlist-field">
+                  <label>Allowed vendors (auto mode)</label>
+                  <div class="row">
+                    <label><input type="checkbox" id="allow-aruba" checked /> Aruba</label>
+                    <label><input type="checkbox" id="allow-cisco" checked /> Cisco</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="seeds">Seed devices (one per line)</label>
+                  <textarea id="seeds" placeholder="10.0.0.1\n10.0.0.2/24"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="section" id="credentials-section">
+              <div class="section-title">Credentials</div>
+              <div class="field">
+                <label>Credentials (ordered)</label>
+                <div class="credentials" id="credentials"></div>
+                <button class="secondary" id="add-credential" type="button">Add credential</button>
+              </div>
+            </div>
+
+            <div class="section" id="ssh-section">
+              <div class="section-title">SSH &amp; Crawl Behaviour</div>
+              <div class="field row">
+                <div>
+                  <label for="timeout">SSH Command Timeout (ms)</label>
+                  <input id="timeout" type="number" value="8000" min="1000" max="600000" />
+                </div>
+                <div>
+                  <label for="concurrency">Concurrency</label>
+                  <input id="concurrency" type="number" value="5" min="1" max="50" />
+                </div>
+              </div>
+              <div class="field row single">
+                <div>
+                  <label for="resolve-neighbors">Neighbor resolution</label>
+                  <select id="resolve-neighbors">
+                    <option value="dns">DNS resolve system name</option>
+                    <option value="dns+hostmap">DNS + hostmap</option>
+                    <option value="arp">ARP table (local)</option>
+                    <option value="dns+arp" selected>DNS + ARP (default)</option>
+                    <option value="dns+hostmap+arp">DNS + hostmap + ARP</option>
+                    <option value="none">None (record only)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field row single">
+                <div>
+                  <label for="hostmap">Hostmap (sysName=ip, one per line)</label>
+                  <textarea id="hostmap" placeholder="SW-CORE-01=10.2.10.21&#10;# comments allowed"></textarea>
+                </div>
+              </div>
+              <div class="two-col">
+                <div class="col">
+                  <div class="field">
+                    <label for="ssh-mode">SSH compatibility</label>
+                    <select id="ssh-mode">
+                      <option value="auto">Auto (modern -> legacy on mismatch)</option>
+                      <option value="force-modern">Force modern</option>
+                      <option value="force-legacy">Force legacy</option>
+                      <option value="force-legacy-cisco">Force legacy (Cisco/old SSH)</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                      <label><input type="checkbox" id="debug-toggle" checked /> Enable debug logs</label>
+                  </div>
+                  <div class="field">
+                    <label><input type="checkbox" id="include-endpoints" /> Include endpoints in crawl</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="field">
+                    <label for="max-attempts">Max attempts per host</label>
+                    <input id="max-attempts" type="number" min="1" max="5" value="1" />
+                  </div>
+                  <div class="field">
+                    <label for="connect-timeout">SSH connect timeout (ms)</label>
+                    <input id="connect-timeout" type="number" min="200" max="20000" value="15000" />
+                  </div>
+                  <div class="field">
+                    <label for="tcp-probe-timeout">TCP probe timeout (ms)</label>
+                    <input id="tcp-probe-timeout" type="number" min="100" max="3000" value="400" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="section hidden" id="merakiSection">
+            <div class="section-title">Meraki Dashboard API</div>
+            <div class="field">
+              <label for="merakiApiKey">API Key</label>
+              <input id="merakiApiKey" type="password" placeholder="Dashboard API key" />
+            </div>
+            <div class="field row">
+              <div>
+                <label for="merakiOrgId">Org ID (optional)</label>
+                <input id="merakiOrgId" type="text" placeholder="123456" />
+              </div>
+              <div>
+                <label for="merakiOrgName">Org Name (optional)</label>
+                <input id="merakiOrgName" type="text" placeholder="Catalytic IT" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="merakiNetworkId">Network ID (optional)</label>
+              <input id="merakiNetworkId" type="text" placeholder="N_1234567890" />
+            </div>
+          </div>
+          <div class="scan-actions">
+            <button id="start-scan" type="button">Start scan</button>
+            <div class="subtitle" id="form-message"></div>
+          </div>
+        </section>
+        <section id="scan-results" style="margin-top: 18px;">
+          <div class="field">
+            <span class="status-pill" id="scan-status">Idle</span>
+          </div>
+          <div class="field" id="metadata"></div>
+          <div class="export-bar">
+            <button class="ghost" id="export-json" type="button">Export JSON</button>
+            <button class="ghost" id="export-devices" type="button">Export Devices CSV</button>
+            <button class="ghost" id="export-links" type="button">Export Links CSV</button>
+          </div>
+        </section>
+      </section>
+      <section class="panel content">
+        <div class="tabs">
+          <button class="ghost tab-button" data-tab="devices">Devices</button>
+          <button class="ghost tab-button" data-tab="links">Links</button>
+          <button class="ghost tab-button" data-tab="topology">Topology</button>
+          <button class="ghost tab-button" data-tab="debug">Debug</button>
+        </div>
+        <section class="tab-panel" id="tab-devices">
+          <div class="field">
+            <label><input type="checkbox" id="show-endpoints" /> Show endpoints</label>
+          </div>
+          <div id="devices"></div>
+          <div class="details-panel hidden" id="device-details">
+            <div class="details-tabs">
+              <button class="ghost details-tab" data-tab="summary">Summary</button>
+              <button class="ghost details-tab" data-tab="power">Power</button>
+              <button class="ghost details-tab" data-tab="config">Running Config</button>
+            </div>
+            <div id="details-content"></div>
+            <div class="config-wrap">
+              <div id="config-controls">
+                <label for="config-mode">Mode</label>
+                <select id="config-mode">
+                  <option value="running">Running</option>
+                  <option value="startup">Startup</option>
+                </select>
+                <label><input type="checkbox" id="config-redact" checked /> Redact secrets</label>
+                <label><input type="checkbox" id="config-wrap-toggle" /> Wrap lines</label>
+                <button class="ghost" id="fetch-config" type="button">Fetch config</button>
+                <button class="ghost" id="download-config" type="button">Download config</button>
+                <button class="ghost" id="copy-config" type="button">Copy</button>
+              </div>
+              <div id="config-output" class="config-output"></div>
+            </div>
+          </div>
+        </section>
+        <section class="tab-panel hidden" id="tab-links">
+          <div class="field">
+            <label><input type="checkbox" id="links-switch-only" checked /> Show only switch-to-switch</label>
+          </div>
+          <div id="links"></div>
+        </section>
+        <section class="tab-panel hidden" id="tab-topology">
+          <div class="field">
+            <label><input type="checkbox" id="topology-switch-only" checked /> Show only switch-to-switch</label>
+          </div>
+          <div id="topology" class="link-list"></div>
+        </section>
+        <section class="tab-panel hidden" id="tab-debug">
+          <div class="field row">
+            <div>
+              <label for="log-level">Level</label>
+              <select id="log-level">
+                <option value="all">All</option>
+                <option value="debug">Debug</option>
+                <option value="info">Info</option>
+                <option value="warn">Warn</option>
+                <option value="error">Error</option>
+              </select>
+            </div>
+            <div>
+              <label for="log-search">Search</label>
+              <input id="log-search" type="text" placeholder="Filter logs" />
+            </div>
+          </div>
+          <div class="field row">
+            <div>
+              <label><input type="checkbox" id="log-pause" /> Pause</label>
+            </div>
+            <div class="export-bar">
+              <button class="ghost" id="copy-logs" type="button">Copy logs</button>
+              <button class="ghost" id="clear-logs" type="button">Clear logs</button>
+            </div>
+          </div>
+          <div id="log-view" class="log-view"></div>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>

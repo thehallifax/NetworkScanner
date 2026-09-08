@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "required": [
+    "localHostname",
+    "localPort",
+    "remoteSystemName",
+    "remotePort"
+  ],
+  "properties": {
+    "localHostname": { "type": "string" },
+    "localPort": { "type": "string" },
+    "remoteSystemName": { "type": "string" },
+    "remotePort": { "type": "string" },
+    "remotePortDescription": { "type": "string" },
+    "remoteChassisId": { "type": "string" },
+    "remoteManagementIp": { "type": "string" },
+    "protocol": { "type": "string", "enum": ["lldp", "cdp"] }
+  }
+}

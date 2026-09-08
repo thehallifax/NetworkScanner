@@ -1,0 +1,36 @@
+{
+  "ports": {
+    "1": {
+      "lldp": {
+        "systemName": "Edge-SW-02",
+        "portId": "2",
+        "chassisId": "aa:bb:cc:dd:ee:02",
+        "managementAddress": "10.10.0.2"
+      },
+      "cdp": {
+        "deviceId": "Edge-SW-02",
+        "portId": "Gi0/2",
+        "address": "10.10.0.2",
+        "platform": "MS120",
+        "capabilities": "Switch"
+      }
+    },
+    "2": {
+      "lldp": {
+        "systemName": "Printer-01",
+        "portId": "eth0",
+        "chassisId": "11:22:33:44:55:66",
+        "managementAddress": "10.10.0.50"
+      }
+    },
+    "3": {
+      "cdp": {
+        "deviceId": "AP-01",
+        "portId": "eth1",
+        "address": "10.10.0.60",
+        "platform": "MR",
+        "capabilities": "AP"
+      }
+    }
+  }
+}

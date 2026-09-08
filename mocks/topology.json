@@ -1,0 +1,68 @@
+{
+  "devices": [
+    {
+      "hostname": "core-sw01",
+      "managementIp": "10.10.0.1",
+      "chassisId": "aa:bb:cc:dd:ee:01",
+      "model": "Aruba 6300",
+      "neighbors": [
+        {
+          "localPort": "1/1/1",
+          "remoteSystemName": "dist-sw01",
+          "remotePort": "1/1/48",
+          "remoteChassisId": "aa:bb:cc:dd:ee:02",
+          "remoteManagementIp": "10.10.0.2",
+          "capabilities": ["bridge"]
+        },
+        {
+          "localPort": "1/1/2",
+          "remoteSystemName": "dist-sw02",
+          "remotePort": "1/1/48",
+          "remoteChassisId": "aa:bb:cc:dd:ee:03",
+          "remoteManagementIp": "10.10.0.3",
+          "capabilities": ["bridge"]
+        }
+      ]
+    },
+    {
+      "hostname": "dist-sw01",
+      "managementIp": "10.10.0.2",
+      "chassisId": "aa:bb:cc:dd:ee:02",
+      "model": "Cisco C9300",
+      "neighbors": [
+        {
+          "localPort": "Gi1/0/48",
+          "remoteSystemName": "core-sw01",
+          "remotePort": "1/1/1",
+          "remoteChassisId": "aa:bb:cc:dd:ee:01",
+          "remoteManagementIp": "10.10.0.1",
+          "capabilities": ["bridge"]
+        },
+        {
+          "localPort": "Gi1/0/1",
+          "remoteSystemName": "edge-ap01",
+          "remotePort": "eth0",
+          "remoteChassisId": "aa:bb:cc:dd:ee:90",
+          "remoteManagementIp": "10.10.1.10",
+          "capabilities": ["wlan-ap"]
+        }
+      ]
+    },
+    {
+      "hostname": "dist-sw02",
+      "managementIp": "10.10.0.3",
+      "chassisId": "aa:bb:cc:dd:ee:03",
+      "model": "Aruba 2930F",
+      "neighbors": [
+        {
+          "localPort": "1/48",
+          "remoteSystemName": "core-sw01",
+          "remotePort": "1/1/2",
+          "remoteChassisId": "aa:bb:cc:dd:ee:01",
+          "remoteManagementIp": "10.10.0.1",
+          "capabilities": ["bridge"]
+        }
+      ]
+    }
+  ]
+}

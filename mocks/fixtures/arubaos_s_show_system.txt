@@ -1,0 +1,5 @@
+System Name       : SW-2930F-01
+Software revision : WC.16.11.0001
+Base MAC Addr     : 64e881-a690c0
+Serial Number     : CN12345678
+Up Time           : 12 days 3 hours
